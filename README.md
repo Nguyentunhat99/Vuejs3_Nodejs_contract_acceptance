@@ -1,4 +1,4 @@
-# pokemongame
+# Contract-Acceptance
 
 ## Project setup
 ```
