@@ -1,9 +1,4 @@
 <template>
-  <RouterLink
-    :to="{ name: 'create.contract' }"
-    class="btn btn-primary mt-2"
-    >Create contract +</RouterLink
-  >
   <ContractList  />
 </template>
 <script>

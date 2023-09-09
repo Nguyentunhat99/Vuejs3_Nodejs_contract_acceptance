@@ -1,14 +1,19 @@
 <template>
-  <div class="d-flex justify-content-end align-items-center mr-3">
-    <span>Search field: </span>
-    <select v-model="searchField" class="mr-2 ml-1">
-      <option value="contract_number">Contract Number</option>
-      <option value="contract_name">Contract Name</option>
-      <option value="customer_id">Customer</option>
-      <option value="status">Status</option>
-      <option value="description">Description</option>
-    </select>
-    <input type="text" v-model="input" placeholder="Search contract..." />
+  <div class="d-flex justify-content-between align-items-center mr-3 mt-5">
+    <RouterLink :to="{ name: 'create.contract' }" class="btn btn-primary mt-2"
+      >Create contract +</RouterLink
+    >
+    <div>
+      <span>Search field: </span>
+      <select v-model="searchField" class="mr-2 ml-1">
+        <option value="contract_number">Contract Number</option>
+        <option value="contract_name">Contract Name</option>
+        <option value="customer_id">Customer</option>
+        <option value="status">Status</option>
+        <option value="description">Description</option>
+      </select>
+      <input type="text" v-model="input" placeholder="Search contract..." />
+    </div>
   </div>
   <table class="table mt-2">
     <thead>
@@ -73,15 +78,13 @@ export default {
 
     const searchedContracts = computed(() => {
       return contracts.value.filter((contract) => {
-
         console.log(contract[searchField.value]);
         console.log(contract.contract_number);
         console.log(contract[searchField.value] === contract.contract_number);
 
-
-        return (
-            contract[searchField.value].toLowerCase().includes(input.value.toLowerCase())
-        );
+        return contract[searchField.value]
+          .toLowerCase()
+          .includes(input.value.toLowerCase());
       });
     });
 
