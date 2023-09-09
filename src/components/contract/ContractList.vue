@@ -1,6 +1,6 @@
 <template>
-  <div class="search-wrapper">
-    <input type="text" v-model="input" placeholder="Search ..." />
+  <div class="d-flex justify-content-end mr-3">
+    <input type="text" v-model="input" placeholder="Search contract..." />
   </div>
   <table class="table mt-2">
     <thead>
@@ -17,7 +17,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="contract in contracts" :key="contract.id">
+      <tr v-for="contract in searchedContracts" :key="contract.id">
         <td>{{ contract.id }}</td>
         <td>{{ contract.contract_number }}</td>
         <td>{{ contract.contract_name }}</td>
@@ -40,6 +40,11 @@
           </button>
         </td>
       </tr>
+      <tr>
+        <div class="d-flex justify-content-center" v-if="input && !searchedContracts.length">
+          <h4 class="text-danger">No results found!</h4>
+        </div>
+      </tr>
     </tbody>
   </table>
 </template>
@@ -47,17 +52,30 @@
 <script>
 import useContracts from "../../composables/contract";
 import { formatTimestampToDate } from "@/utils/common";
-import { onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 export default {
   setup() {
     const { deleteContract, getContracts, contracts } = useContracts();
+    const input = ref("");
+
+    const searchedContracts = computed(() => {
+      return contracts.value.filter((contract) => {
+        return (
+          contract.contract_name
+            .toLowerCase()
+            .indexOf(input.value.toLowerCase()) != -1
+        );
+      });
+    });
+
     const handleDeleteContract = async (id) => {
       if (!window.confirm("You sure?")) {
         return;
       }
       await deleteContract(id);
     };
+
     onMounted(getContracts);
 
     const formatTimeStamp = (timestamp) => {
@@ -68,6 +86,8 @@ export default {
       handleDeleteContract,
       formatTimeStamp,
       contracts,
+      searchedContracts,
+      input,
     };
   },
 };
