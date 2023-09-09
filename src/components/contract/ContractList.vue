@@ -1,5 +1,13 @@
 <template>
-  <div class="d-flex justify-content-end mr-3">
+  <div class="d-flex justify-content-end align-items-center mr-3">
+    <span>Search field: </span>
+    <select v-model="searchField" class="mr-2 ml-1">
+      <option value="contract_number">Contract Number</option>
+      <option value="contract_name">Contract Name</option>
+      <option value="customer_id">Customer</option>
+      <option value="status">Status</option>
+      <option value="description">Description</option>
+    </select>
     <input type="text" v-model="input" placeholder="Search contract..." />
   </div>
   <table class="table mt-2">
@@ -41,7 +49,10 @@
         </td>
       </tr>
       <tr>
-        <div class="d-flex justify-content-center" v-if="input && !searchedContracts.length">
+        <div
+          class="d-flex justify-content-center"
+          v-if="input && !searchedContracts.length"
+        >
           <h4 class="text-danger">No results found!</h4>
         </div>
       </tr>
@@ -58,13 +69,18 @@ export default {
   setup() {
     const { deleteContract, getContracts, contracts } = useContracts();
     const input = ref("");
+    const searchField = ref("contract_number");
 
     const searchedContracts = computed(() => {
       return contracts.value.filter((contract) => {
+
+        console.log(contract[searchField.value]);
+        console.log(contract.contract_number);
+        console.log(contract[searchField.value] === contract.contract_number);
+
+
         return (
-          contract.contract_name
-            .toLowerCase()
-            .indexOf(input.value.toLowerCase()) != -1
+            contract[searchField.value].toLowerCase().includes(input.value.toLowerCase())
         );
       });
     });
@@ -88,6 +104,7 @@ export default {
       contracts,
       searchedContracts,
       input,
+      searchField,
     };
   },
 };
