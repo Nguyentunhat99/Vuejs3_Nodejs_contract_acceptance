@@ -9,13 +9,5 @@ export default {
   components: {
     AcceptanceList,
   },
-  // setup() {
-  //   const { acceptances, getAcceptances } = useAcceptances();
-  //   onMounted(getAcceptances);
-
-    // return {
-    //   // acceptances,
-    // };
-  // },
 };
 </script>

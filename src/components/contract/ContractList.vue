@@ -44,7 +44,7 @@
             :to="{ name: 'contract.edit', params: { id: contract.id } }"
             class="btn btn-primary mr-2"
             >Update</RouterLink
-          >
+          > 
           <button
             @click="handleDeleteContract(contract.id)"
             class="btn btn-danger"
@@ -54,12 +54,9 @@
         </td>
       </tr>
       <tr>
-        <div
-          class="d-flex justify-content-center"
-          v-if="input && !searchedContracts.length"
-        >
-          <h4 class="text-danger">No results found!</h4>
-        </div>
+        <td colspan="9" v-if="input && !searchedContracts.length">
+          <h4 class="text-danger text-center">No results found!</h4>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -68,7 +65,7 @@
 <script>
 import useContracts from "../../composables/contract";
 import { formatTimestampToDate } from "@/utils/common";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 
 export default {
   setup() {
@@ -76,11 +73,15 @@ export default {
     const input = ref("");
     const searchField = ref("contract_number");
 
+    watch(input, (newVal, oldVal) => {
+      console.log(newVal,oldVal);
+    })
+
     const searchedContracts = computed(() => {
       return contracts.value.filter((contract) => {
-        console.log(contract[searchField.value]);
-        console.log(contract.contract_number);
-        console.log(contract[searchField.value] === contract.contract_number);
+        // console.log(contract[searchField.value]);
+        // console.log(contract.contract_number);
+        // console.log(contract[searchField.value] === contract.contract_number);
 
         return contract[searchField.value]
           .toLowerCase()

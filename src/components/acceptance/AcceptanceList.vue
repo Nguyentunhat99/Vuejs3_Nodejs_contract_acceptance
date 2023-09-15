@@ -44,12 +44,9 @@
         </td>
       </tr>
       <tr>
-        <div
-          class="d-flex justify-content-center"
-          v-if="input && !searchedAcceptances.length"
-        >
-          <h4 class="text-danger">No results found!</h4>
-        </div>
+        <td colspan="9" v-if="input && !searchedAcceptances.length">
+          <h4 class="text-danger text-center">No results found!</h4>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -75,7 +72,6 @@ export default {
 
     onMounted(getAcceptances);
 
-
     const formatTimeStamp = (timestamp) => {
       return formatTimestampToDate(timestamp);
     };
@@ -93,7 +89,7 @@ export default {
       formatTimeStamp,
       input,
       searchedAcceptances,
-      acceptances
+      acceptances,
     };
   },
 };

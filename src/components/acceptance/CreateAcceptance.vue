@@ -11,14 +11,11 @@
     <form @submit.prevent="saveAcceptance">
       <div class="form-group">
         <label for="contract_id">Contract Id</label>
-        <input
-          type="number"
-          name="contract_id"
-          id="contract_id"
-          class="form-control"
-          v-model="form.contract_id"
-          required
-        />
+        <select id="contract_id" name="contract_id" class="form-control" v-model="form.contract_id" required>
+          <option v-for="contract in contracts" :key="contract.id" :value="contract.id">
+            {{ contract.id }}
+          </option>
+        </select>
       </div>
       <div class="form-group">
         <label for="acceptance_name">Acceptance Name</label>
@@ -55,14 +52,11 @@
       </div>
       <div class="form-group">
         <label for="status">Status</label>
-        <input
-          type="number"
-          name="status"
-          id="status"
-          class="form-control"
-          v-model="form.status"
-          required
-        />
+        <select name="status" id="status" class="form-control" v-model="form.status" required>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
       </div>
       <div class="form-group">
         <label for="acceptance_date">Acceptance Date</label>
@@ -92,7 +86,10 @@
 </template>
 <script>
 import useAcceptances from "@/composables/acceptance";
+import useContracts from "@/composables/contract";
 import { reactive } from "vue";
+import { onMounted } from "vue";
+
 export default {
   setup() {
     const form = reactive({
@@ -106,13 +103,18 @@ export default {
     });
 
     const { createAcceptance, errors } = useAcceptances();
+
+    const { contracts, getContracts } = useContracts();
     const saveAcceptance = async () => {
       await createAcceptance({ ...form });
     };
+    onMounted(getContracts);
+
     return {
       form,
       saveAcceptance,
       errors,
+      contracts,
     };
   },
 };
