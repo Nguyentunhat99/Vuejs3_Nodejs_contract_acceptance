@@ -4,14 +4,21 @@
     <form @submit.prevent="saveAcceptance">
       <div class="form-group">
         <label for="contract_id">Contract Id</label>
-        <input
-          type="number"
-          name="contract_id"
+        <select
           id="contract_id"
+          name="contract_id"
           class="form-control"
           v-model="acceptance.contract_id"
           required
-        />
+        >
+          <option
+            v-for="contract in contracts"
+            :key="contract.id"
+            :value="contract.id"
+          >
+            {{ contract.id }}
+          </option>
+        </select>
       </div>
       <div class="form-group">
         <label for="acceptance_name">Acceptance Name</label>
@@ -26,14 +33,14 @@
       </div>
       <div class="form-group">
         <label for="acceptance_amount">Acceptance Amount</label>
-        <input
-          type="number"
-          name="acceptance_amount"
+        <VueNumberFormat
+          class="col-12 form-control"
           id="acceptance_amount"
-          class="form-control"
-          v-model="acceptance.acceptance_amount"
+          name="acceptance_amount"
           required
-        />
+          v-model:value="acceptance.acceptance_amount"
+          :options="{ precision: 0, decimal: '.', thousand: ',' }"
+        ></VueNumberFormat>
       </div>
       <div class="form-group">
         <label for="volume">Volume</label>
@@ -48,17 +55,23 @@
       </div>
       <div class="form-group">
         <label for="status">Status</label>
-        <input
-          type="number"
+        <select
           name="status"
           id="status"
           class="form-control"
           v-model="acceptance.status"
           required
-        />
+        >
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
       </div>
       <div class="form-group">
-        <label for="acceptance_date">Acceptance Date: {{ formatTimeStamp(acceptance.acceptance_date) }}</label>
+        <label for="acceptance_date"
+          >Acceptance Date:
+          {{ formatTimeStamp(acceptance.acceptance_date) }}</label
+        >
         <input
           type="date"
           name="acceptance_date"
@@ -86,6 +99,7 @@
 <script>
 import { onMounted } from "vue";
 import useAcceptances from "@/composables/acceptance";
+import useContracts from "@/composables/contract";
 import { formatTimestampToDate } from "@/utils/common";
 
 export default {
@@ -96,6 +110,8 @@ export default {
     },
   },
   setup(props) {
+    const { contracts, getContracts } = useContracts();
+    onMounted(getContracts);
     const { acceptance, getAcceptance, updateAcceptance } = useAcceptances();
     onMounted(() => getAcceptance(props.id));
 
@@ -105,7 +121,7 @@ export default {
     const formatTimeStamp = (timestamp) => {
       return formatTimestampToDate(timestamp);
     };
-    return { acceptance, saveAcceptance, formatTimeStamp };
+    return { acceptance, saveAcceptance, formatTimeStamp, contracts };
   },
 };
 </script>
